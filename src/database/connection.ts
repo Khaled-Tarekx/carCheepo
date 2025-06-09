@@ -6,7 +6,7 @@ const connectWithRetry = async () => {
 	console.log('MongoDB connection with retry');
 	await mongoose
 		.connect(uri, {
-			dbName: 'TaskManager',
+			dbName: 'AmrKhaled',
 			serverSelectionTimeoutMS: 30000, // 30 seconds
 			connectTimeoutMS: 30000, // 30 seconds
 		})
