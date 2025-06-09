@@ -12,7 +12,6 @@ import { CommentNotFound, ReplyNotFound } from '../comments/errors/cause';
 import { TaskNotFound } from '../tasks/errors/cause';
 import { UserDeletionFailed, UserUpdatingFailed } from './errors/cause';
 import { UserNotFound } from '../auth/errors/cause';
-import { supabase } from '../auth/supabase';
 import { Member } from '../workspaces/models';
 
 export const getUsers = async (user: Express.User) => {
@@ -37,10 +36,7 @@ export const updateUserInfo = async (
 		{ new: true }
 	);
 	checkResource(updatedUser, UserUpdatingFailed);
-	await supabase.auth.updateUser({
-		data: { ...updateData },
-		email: updateData.email,
-	});
+
 	return updatedUser;
 };
 
@@ -48,7 +44,6 @@ export const deleteUser = async (user: Express.User) => {
 	const userToDelete = await UserModel.findOne({ email: user.email });
 	checkResource(userToDelete, UserNotFound);
 
-	await supabase.auth.admin.deleteUser(user.supaId!);
 	await Member.deleteOne({ user: user.id });
 
 	const deletedUser = await userToDelete.deleteOne();

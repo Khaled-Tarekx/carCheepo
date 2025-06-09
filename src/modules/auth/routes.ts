@@ -18,6 +18,7 @@ import {
 	verfifyResetPasswordSchema,
 	resetPasswordRequestSchema,
 } from './validation';
+import { authMiddleware } from './middleware';
 
 const router = express.Router();
 
@@ -57,6 +58,7 @@ router.patch(
 
 router.patch(
 	'/change-password',
+	authMiddleware,
 	validateResource({ bodySchema: changePasswordSchema }),
 	changePassword
 );
