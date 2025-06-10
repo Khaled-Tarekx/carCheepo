@@ -31,4 +31,4 @@ export const createApp = () => {
 	return app;
 };
 
-// createApp();
+createApp();

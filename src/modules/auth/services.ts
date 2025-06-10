@@ -1,5 +1,4 @@
 import {
-	Roles,
 	changePasswordDTO,
 	type createUserDTO,
 	type loginDTO,
@@ -24,7 +23,7 @@ import {
 	getUserFromToken,
 	sendCustomEmail,
 } from './utillities';
-
+import { Response } from 'express';
 const accessSecretKey = process.env.ACCESS_SECRET_KEY;
 const refreshSecretKey = process.env.REFRESH_SECRET_KEY;
 
@@ -38,12 +37,14 @@ export const registerUser = async (userInput: createUserDTO) => {
 		email,
 		password: hashedPassword,
 	});
+	const userWithoutPassword = user.toObject();
+	delete userWithoutPassword.password;
 
 	checkResource(user, UserNotFound);
-	return user;
+	return userWithoutPassword;
 };
 
-export const loginUser = async (logininput: loginDTO) => {
+export const loginUser = async (logininput: loginDTO, res: Response) => {
 	const { email, password } = logininput;
 	const emailExists = await User.findOne({ email });
 	if (!emailExists || !emailExists.password) {
@@ -74,6 +75,12 @@ export const loginUser = async (logininput: loginDTO) => {
 		refreshSecretKey,
 		'90d'
 	);
+	res.cookie('refreshToken', refreshToken, {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === 'production',
+		sameSite: 'strict',
+		maxAge: 7 * 24 * 60 * 60 * 1000,
+	});
 
 	const userData = {
 		email: updatedUser.email,
@@ -81,7 +88,7 @@ export const loginUser = async (logininput: loginDTO) => {
 		roles: updatedUser.roles,
 	};
 
-	return { jwtToken, refreshToken, userData };
+	return { jwtToken, userData };
 };
 
 export const refreshSession = async (tokenInput: refreshSessionDTO) => {

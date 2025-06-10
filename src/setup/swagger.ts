@@ -1,22 +1,44 @@
 import swaggerJsdoc from 'swagger-jsdoc';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
-const options = {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const swaggerOptions = {
 	definition: {
 		openapi: '3.0.0',
 		info: {
-			title: 'Express API',
+			title: 'Task Management API',
 			version: '1.0.0',
-			description: 'A simple Express API',
+			description: 'API documentation for Task Management System',
 		},
 		servers: [
 			{
-				url: 'http://localhost:7500/api',
+				url: 'http://localhost:7500/api/v1',
+				description: 'Development server',
+			},
+		],
+		components: {
+			securitySchemes: {
+				bearerAuth: {
+					type: 'http',
+					scheme: 'bearer',
+					bearerFormat: 'JWT',
+				},
+			},
+		},
+		security: [
+			{
+				bearerAuth: [],
 			},
 		],
 	},
-	apis: ['../modules/**/controllers.ts'],
+	apis: [
+		path.join(__dirname, '../modules/**/*.ts'),
+		path.join(__dirname, '../modules/**/*.js'),
+	],
 };
 
-const swaggerSpec = swaggerJsdoc(options);
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 export default swaggerSpec;

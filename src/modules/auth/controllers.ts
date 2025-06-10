@@ -28,9 +28,42 @@ import * as UserErrorMsg from '.././users/errors/msg';
 
 import { UserUpdatingFailed } from '../users/errors/cause';
 import { MailFailedToSend } from '../tasks/errors/cause';
-import { checkResource } from 'src/utills/helpers';
-import { User } from '@supabase/supabase-js';
+import { checkResource } from '../../utills/helpers';
 
+/**
+ * @swagger
+ * /register-user:
+ *   post:
+ *     tags:
+ *       - Authentication
+ *     summary: Register a new user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - email
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 format: password
+ *     responses:
+ *       201:
+ *         description: User successfully registered
+ *       400:
+ *         description: Registration failed due to validation errors
+ *       500:
+ *         description: Server error
+ */
 export const registerUser = async (
 	req: TypedRequestBody<typeof createUserSchema>,
 	res: Response,
@@ -56,6 +89,60 @@ export const registerUser = async (
 	}
 };
 
+/**
+ * @swagger
+ * /login-user:
+ *   post:
+ *     tags:
+ *       - Authentication
+ *     summary: Login user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 format: password
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 jwtToken:
+ *                   type: string
+ *                 userData:
+ *                   type: object
+ *                   properties:
+ *                     email:
+ *                       type: string
+ *                     id:
+ *                       type: string
+ *                     roles:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *         headers:
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *               example: refreshToken=xyz; HttpOnly; Secure; SameSite=Strict
+ *       404:
+ *         description: User not found
+ *       401:
+ *         description: Invalid credentials
+ */
 export const signInUser = async (
 	req: TypedRequestBody<typeof loginSchema>,
 	res: Response,
@@ -63,7 +150,7 @@ export const signInUser = async (
 ) => {
 	const { email, password } = req.body;
 	try {
-		const data = await AuthServices.loginUser({ email, password });
+		const data = await AuthServices.loginUser({ email, password }, res);
 
 		res.status(StatusCodes.OK).json(data);
 	} catch (err: unknown) {
@@ -78,6 +165,30 @@ export const signInUser = async (
 	}
 };
 
+/**
+ * @swagger
+ * /refresh-session:
+ *   post:
+ *     tags:
+ *       - Authentication
+ *     summary: Refresh access token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - refresh_token
+ *             properties:
+ *               refresh_token:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: New access token generated
+ *       401:
+ *         description: Invalid refresh token
+ */
 export const refreshSession = async (
 	req: TypedRequestBody<typeof refreshTokenSchema>,
 	res: Response,
@@ -99,6 +210,32 @@ export const refreshSession = async (
 		}
 	}
 };
+
+/**
+ * @swagger
+ * /request-reset-password:
+ *   post:
+ *     tags:
+ *       - Authentication
+ *     summary: Request password reset
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *     responses:
+ *       201:
+ *         description: Reset code sent successfully
+ *       404:
+ *         description: User not found
+ */
 
 export const requestResetPassword = async (
 	req: TypedRequestBody<typeof resetPasswordRequestSchema>,
@@ -122,6 +259,30 @@ export const requestResetPassword = async (
 	}
 };
 
+/**
+ * @swagger
+ * /verify-reset-password:
+ *   post:
+ *     tags:
+ *       - Authentication
+ *     summary: Verify reset password code
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - resetCode
+ *             properties:
+ *               resetCode:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Reset code verified successfully
+ *       401:
+ *         description: Invalid or expired reset code
+ */
 export const verifyResetCode = async (
 	req: TypedRequestBody<typeof verfifyResetPasswordSchema>,
 	res: Response,
@@ -143,6 +304,39 @@ export const verifyResetCode = async (
 		}
 	}
 };
+
+/**
+ * @swagger
+ * /reset-password:
+ *   post:
+ *     tags:
+ *       - Authentication
+ *     summary: Reset password with token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - token
+ *               - password
+ *               - confirmPassword
+ *             properties:
+ *               token:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *                 format: password
+ *               confirmPassword:
+ *                 type: string
+ *                 format: password
+ *     responses:
+ *       201:
+ *         description: Password reset successful
+ *       401:
+ *         description: Invalid token or password mismatch
+ */
 
 export const resetPassword = async (
 	req: TypedRequestBody<typeof resetPasswordSchema>,
@@ -172,6 +366,42 @@ export const resetPassword = async (
 		}
 	}
 };
+
+/**
+ * @swagger
+ * /change-password:
+ *   post:
+ *     tags:
+ *       - Authentication
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Change password (requires authentication)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - oldPassword
+ *               - password
+ *               - confirmPassword
+ *             properties:
+ *               oldPassword:
+ *                 type: string
+ *                 format: password
+ *               password:
+ *                 type: string
+ *                 format: password
+ *               confirmPassword:
+ *                 type: string
+ *                 format: password
+ *     responses:
+ *       201:
+ *         description: Password changed successfully
+ *       401:
+ *         description: Invalid old password or unauthorized
+ */
 
 export const changePassword = async (
 	req: TypedRequestBody<typeof changePasswordSchema>,
