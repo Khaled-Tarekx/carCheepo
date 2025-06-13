@@ -121,12 +121,17 @@ export const requestPasswordReset = async (
 	const resetCode = generateRandomCode();
 	user.resetPasswordCode = resetCode;
 	user.resetPasswordExpire = ExpiresIn10Minutes;
+
 	await user.save();
-	await sendCustomEmail(
-		user.email,
-		'reset password request',
-		`here is your 6 digit code to reset your password ${resetCode}`
-	);
+	try {
+		await sendCustomEmail(
+			user.email,
+			'reset password request',
+			`here is your 6 digit code to reset your password ${resetCode}`
+		);
+	} catch (error) {
+		console.error('Error sending email:', error);
+	}
 
 	return {
 		message: 'your reset code has been sent to your email',

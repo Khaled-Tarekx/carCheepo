@@ -86,6 +86,7 @@ export const sendCustomEmail = async (
 			date: moment(new Date()).format('DD MM YYYY hh:mm:ss'),
 		});
 	} catch (err: unknown) {
+		console.error('Error sending email:', err);
 		return new MailFailedToSend();
 	}
 };

@@ -308,7 +308,7 @@ export const verifyResetCode = async (
 /**
  * @swagger
  * /reset-password:
- *   post:
+ *   patch:
  *     tags:
  *       - Authentication
  *     summary: Reset password with token
@@ -370,7 +370,7 @@ export const resetPassword = async (
 /**
  * @swagger
  * /change-password:
- *   post:
+ *   patch:
  *     tags:
  *       - Authentication
  *     security:

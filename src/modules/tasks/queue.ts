@@ -19,4 +19,12 @@ emailQueue.process(async (job) => {
 	});
 });
 
+emailQueue.on('error', (error) => {
+	console.error('Queue error:', error);
+});
+
+emailQueue.on('failed', (job, error) => {
+	console.error('Job failed:', job.id, error);
+});
+
 export default emailQueue;
