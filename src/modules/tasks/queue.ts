@@ -1,11 +1,13 @@
 import Queue from 'bull';
 import transporter from './transporter';
 
+
+
 const emailQueue = new Queue('email', {
 	redis: {
 		host: '127.0.0.1',
-		port: 6379,
-	},
+		port: 6379
+	}
 });
 
 emailQueue.process(async (job) => {

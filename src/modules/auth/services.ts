@@ -27,6 +27,8 @@ import { Response } from 'express';
 const accessSecretKey = process.env.ACCESS_SECRET_KEY;
 const refreshSecretKey = process.env.REFRESH_SECRET_KEY;
 
+console.log('Access Secret Key:', accessSecretKey); // Debug log
+
 export const registerUser = async (userInput: createUserDTO) => {
 	const { username, email, password } = userInput;
 	const hashedPassword = await argon2.hash(password);

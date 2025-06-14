@@ -19,6 +19,10 @@ declare global {
 			DEFAULT_EXPIRATION_CASHE: string;
 			SUPABASE_URL: string;
 			SUBABASE_API_KEY: string;
+			REDIS_HOST: string;
+			REDIS_PORT: number;
+			REDIS_PASSWORD: string;
+			REDIS_URL: string;
 		}
 	}
 }
