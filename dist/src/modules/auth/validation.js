@@ -63,11 +63,11 @@ export const changePasswordSchema = z.object({
     password: z.string({
         required_error: 'password is required',
         invalid_type_error: 'password must be a string',
-    }),
+    }).min(6, 'password cant be less than 6 characters'),
     confirmPassword: z.string({
         required_error: 'password is required',
         invalid_type_error: 'password must be a string',
-    }),
+    }).min(6, 'confirm password cant be less than 6 characters'),
 });
 export const resetPasswordSchema = z.object({
     token: z.string({
@@ -77,11 +77,11 @@ export const resetPasswordSchema = z.object({
     password: z.string({
         required_error: 'password is required',
         invalid_type_error: 'password must be a string',
-    }),
+    }).min(6, 'password cant be less than 6 characters'),
     confirmPassword: z.string({
         required_error: 'confirm password is required',
         invalid_type_error: 'confirm password must be a string',
-    }),
+    }).min(6, 'confirm password cant be less than 6 characters'),
 });
 export const verfifyResetPasswordSchema = z.object({
     resetCode: z.string({
