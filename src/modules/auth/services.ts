@@ -28,13 +28,11 @@ const accessSecretKey = process.env.ACCESS_SECRET_KEY;
 const refreshSecretKey = process.env.REFRESH_SECRET_KEY;
 
 export const registerUser = async (userInput: createUserDTO) => {
-	const { username, email, password } = userInput;
-	const hashedPassword = await argon2.hash(password);
+	const hashedPassword = await argon2.hash(userInput.password);
 
 	checkResource(hashedPassword, PasswordHashingError);
 	const user = await User.create({
-		username,
-		email,
+		...userInput,
 		password: hashedPassword,
 	});
 	const userWithoutPassword = user.toObject();
@@ -67,7 +65,7 @@ export const loginUser = async (logininput: loginDTO, res: Response) => {
 	const jwtToken = await createTokenFromUser(
 		updatedUser,
 		accessSecretKey,
-		'1h'
+		'15m'
 	);
 
 	const refreshToken = await createTokenFromUser(
@@ -75,12 +73,12 @@ export const loginUser = async (logininput: loginDTO, res: Response) => {
 		refreshSecretKey,
 		'90d'
 	);
-	res.cookie('refreshToken', refreshToken, {
-		httpOnly: true,
-		secure: process.env.NODE_ENV === 'production',
-		sameSite: 'strict',
-		maxAge: 7 * 24 * 60 * 60 * 1000,
-	});
+	// res.cookie('refreshToken', refreshToken, {
+	// 	httpOnly: true,
+	// 	secure: process.env.NODE_ENV === 'production',
+	// 	sameSite: 'strict',
+	// 	maxAge: 7 * 24 * 60 * 60 * 1000,
+	// });
 
 	const userData = {
 		email: updatedUser.email,
@@ -88,7 +86,7 @@ export const loginUser = async (logininput: loginDTO, res: Response) => {
 		roles: updatedUser.roles,
 	};
 
-	return { jwtToken, userData };
+	return { jwtToken, refreshToken, userData };
 };
 
 export const refreshSession = async (tokenInput: refreshSessionDTO) => {
@@ -97,7 +95,7 @@ export const refreshSession = async (tokenInput: refreshSessionDTO) => {
 	const newAccessToken = await createTokenFromUser(
 		user,
 		accessSecretKey,
-		'1h'
+		'15m'
 	);
 
 	return {

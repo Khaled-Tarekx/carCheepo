@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { createCommentLikeSchema } from './validation';
 
 import type { TypedRequestBody } from 'zod-express-middleware';
-import * as CommentLikeServices from './comment.services';
+import * as CommentLikeServices from './services';
 import { checkUser } from '../../utills/helpers';
 import {
 	LikeCountUpdateFailed,

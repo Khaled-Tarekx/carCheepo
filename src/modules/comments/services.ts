@@ -7,7 +7,6 @@ import {
 } from '../../utills/helpers';
 
 import type { createCommentDTO, updateCommentDTO } from './types';
-import Task from '../tasks/models';
 import {
 	CommentCountUpdateFailed,
 	CommentCreationFailed,
@@ -46,15 +45,15 @@ export const createComment = async (
 
 	checkResource(comment, CommentCreationFailed);
 
-	const task = await Task.findOneAndUpdate(
-		{ _id: comment.task._id },
-		{
-			$inc: { commentCount: 1 },
-		},
-		{ new: true }
-	);
+	// const task = await Task.findOneAndUpdate(
+	// 	{ _id: comment.task._id },
+	// 	{
+	// 		$inc: { commentCount: 1 },
+	// 	},
+	// 	{ new: true }
+	// ); // replace with post later
 
-	checkResource(task, CommentCountUpdateFailed);
+	// checkResource(task, CommentCountUpdateFailed);
 
 	return comment;
 };
@@ -87,14 +86,14 @@ export const deleteComment = async (
 	const comment = await findResourceById(Comment, commentId, CommentNotFound);
 	await isResourceOwner(user.id, comment.owner._id);
 
-	const task = await Task.findByIdAndUpdate(
-		comment.task._id,
-		{
-			$inc: { commentCount: 1 },
-		},
-		{ new: true }
-	);
-	checkResource(task, CommentCountUpdateFailed);
+	// const task = await Task.findByIdAndUpdate(
+	// 	comment.task._id,
+	// 	{
+	// 		$inc: { commentCount: 1 },
+	// 	},
+	// 	{ new: true }
+	// );
+	// checkResource(task, CommentCountUpdateFailed); // replace witth post later
 	const commentToDelete = await Comment.deleteOne(comment._id);
 	if (commentToDelete.deletedCount === 0) {
 		throw new CommentDeletionFailed();

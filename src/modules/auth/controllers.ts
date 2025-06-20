@@ -27,7 +27,7 @@ import * as ErrorMsg from './errors/msg';
 import * as UserErrorMsg from '.././users/errors/msg';
 
 import { UserUpdatingFailed } from '../users/errors/cause';
-import { MailFailedToSend } from '../tasks/errors/cause';
+import { MailFailedToSend } from '../../utills/errors/cause';
 import { checkResource } from '../../utills/helpers';
 
 /**
@@ -47,8 +47,17 @@ import { checkResource } from '../../utills/helpers';
  *               - username
  *               - email
  *               - password
+ *               - phone
+ *               - country
+ *               - city
  *             properties:
  *               username:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               country:
+ *                 type: string
+ *               city:
  *                 type: string
  *               email:
  *                 type: string
@@ -64,17 +73,21 @@ import { checkResource } from '../../utills/helpers';
  *       500:
  *         description: Server error
  */
+
 export const registerUser = async (
 	req: TypedRequestBody<typeof createUserSchema>,
 	res: Response,
 	next: NextFunction
 ) => {
-	const { username, email, password } = req.body;
+	const { username, email, password, country, city, phone } = req.body;
 	try {
 		const user = await AuthServices.registerUser({
 			username,
 			email,
 			password,
+			country,
+			city,
+			phone,
 		});
 		res.status(StatusCodes.CREATED).json({ data: user });
 	} catch (err: unknown) {

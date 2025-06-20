@@ -1,4 +1,3 @@
-import { TaskSchema } from '../tasks/models';
 import {
 	getModelForClass,
 	prop,
@@ -9,9 +8,6 @@ import { UserSchema } from '../users/models';
 
 @modelOptions({ schemaOptions: { timestamps: true } })
 export class CommentSchema {
-	@prop({ ref: () => 'TaskSchema', required: true })
-	public task!: Ref<TaskSchema>;
-
 	@prop({ ref: () => 'UserSchema', required: true })
 	public owner!: Ref<UserSchema>;
 

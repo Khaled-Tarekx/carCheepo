@@ -9,9 +9,9 @@ import {
 	TokenVerificationFailed,
 	UserNotFound,
 } from './errors/cause';
-import emailQueue from '../tasks/queue';
+import emailQueue from '../../setup/queue';
 import moment from 'moment';
-import { MailFailedToSend } from '../tasks/errors/cause';
+import { MailFailedToSend } from '../../utills/errors/cause';
 import { findResourceById } from '../../utills/helpers';
 
 export const createTokenFromUser = async (

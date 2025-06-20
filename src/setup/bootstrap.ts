@@ -1,6 +1,8 @@
 import express, { Application } from 'express';
 import ErrorHandler from '../errors/middleware';
 import UserRouter from '../modules/users/routes';
+import CarRouter from '../modules/cars/routes';
+
 import AuthRouter from '../modules/auth/routes';
 
 import swaggerUi from 'swagger-ui-express';
@@ -23,6 +25,8 @@ const bootstrap = (app: Application) => {
 	app.use('/uploads', express.static('uploads'));
 
 	app.use('/api/v1/users', UserRouter);
+	app.use('/api/v1/cars', CarRouter);
+
 	app.use(ErrorHandler);
 };
 
