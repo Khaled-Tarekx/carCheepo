@@ -17,8 +17,6 @@ declare global {
 			DEBUG: string;
 			BASE_URL: string;
 			DEFAULT_EXPIRATION_CASHE: string;
-			SUPABASE_URL: string;
-			SUBABASE_API_KEY: string;
 		}
 	}
 }

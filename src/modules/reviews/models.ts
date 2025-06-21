@@ -7,25 +7,21 @@ import {
 import { UserSchema } from '../users/models';
 
 @modelOptions({ schemaOptions: { timestamps: true } })
-export class CommentSchema {
+export class ReviewSchema {
 	@prop({ ref: () => 'UserSchema', required: true })
 	public owner!: Ref<UserSchema>;
 
-	@prop({ ref: () => CommentSchema })
-	public parent?: Ref<CommentSchema>;
-
-	@prop({ ref: () => CommentSchema })
-	public replies!: Ref<CommentSchema>[];
+	@prop({ ref: () => 'PostSchema', required: true })
+	public post!: Ref<'PostSchema'>;
 
 	@prop({ type: () => String, required: true, minlength: 1 })
 	public context!: string;
 
 	@prop({ type: () => Number, default: 0 })
-	public replyCount!: number;
-
-	@prop({ type: () => Number, default: 0 })
 	public likeCount!: number;
+	@prop({ type: () => Number, default: 0 })
+	public viewCount!: number;
 }
 
-const Comment = getModelForClass(CommentSchema);
-export { Comment };
+const Review = getModelForClass(ReviewSchema);
+export { Review };

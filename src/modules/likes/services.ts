@@ -1,4 +1,4 @@
-import { CommentLike } from './models';
+import { ReviewLike } from './models';
 
 import {
 	checkResource,
@@ -6,8 +6,8 @@ import {
 	validateObjectIds,
 	isResourceOwner,
 } from '../../utills/helpers';
-import type { CommentLikeDTO } from './types';
-import { Comment } from '../comments/models';
+import type { ReviewLikeDTO } from './types';
+import { Review } from '../reviews/models';
 import {
 	LikeCountUpdateFailed,
 	LikeCreationFailed,
@@ -15,68 +15,68 @@ import {
 	UnLikeFailed,
 } from './errors/cause';
 
-export const getCommentLikes = async (commentId: string) => {
-	validateObjectIds([commentId]);
-	return CommentLike.find({ comment: commentId });
+export const getReviewLikes = async (reviewId: string) => {
+	validateObjectIds([reviewId]);
+	return ReviewLike.find({ review: reviewId });
 };
 
-export const getCommentLike = async (likeId: string) => {
+export const getReviewLike = async (likeId: string) => {
 	validateObjectIds([likeId]);
 
-	return findResourceById(CommentLike, likeId, LikeNotFound);
+	return findResourceById(ReviewLike, likeId, LikeNotFound);
 };
 
-export const getUserCommentLike = async (user: Express.User) => {
-	const userCommentLike = await CommentLike.findOne({
+export const getUserReviewLike = async (user: Express.User) => {
+	const userReviewLike = await ReviewLike.findOne({
 		owner: user.id,
 	});
-	checkResource(userCommentLike, LikeNotFound);
-	return userCommentLike;
+	checkResource(userReviewLike, LikeNotFound);
+	return userReviewLike;
 };
 
-export const createCommentLike = async (
-	commentData: CommentLikeDTO,
+export const createReviewLike = async (
+	reviewData: ReviewLikeDTO,
 	user: Express.User
 ) => {
-	const { commentId } = commentData;
-	validateObjectIds([commentId]);
+	const { reviewId } = reviewData;
+	validateObjectIds([reviewId]);
 
-	const commentLike = await CommentLike.create({
+	const reviewLike = await ReviewLike.create({
 		owner: user.id,
-		comment: commentId,
+		comment: reviewId,
 	});
-	const comment = await Comment.findByIdAndUpdate(commentLike.comment._id, {
+	const review = await Review.findByIdAndUpdate(reviewLike.review._id, {
 		$inc: { likeCount: 1 },
 	});
-	checkResource(comment, LikeCountUpdateFailed);
-	checkResource(commentLike, LikeCreationFailed);
+	checkResource(review, LikeCountUpdateFailed);
+	checkResource(reviewLike, LikeCreationFailed);
 
-	return commentLike;
+	return reviewLike;
 };
 
-export const deleteCommentLike = async (
+export const deleteReviewLike = async (
 	likeId: string,
 	user: Express.User
 ) => {
 	validateObjectIds([likeId]);
-	const commentLikeToDelete = await findResourceById(
-		CommentLike,
+	const reviewLikeToDelete = await findResourceById(
+		ReviewLike,
 		likeId,
 		LikeNotFound
 	);
-	await isResourceOwner(user.id, commentLikeToDelete.owner._id);
-	const comment = await Comment.findByIdAndUpdate(
-		commentLikeToDelete.comment._id,
+	await isResourceOwner(user.id, reviewLikeToDelete.owner._id);
+	const review = await Review.findByIdAndUpdate(
+		reviewLikeToDelete.review._id,
 		{
 			$inc: { likeCount: -1 },
 		}
 	);
-	checkResource(comment, LikeCountUpdateFailed);
-	const likeToDelete = await CommentLike.findByIdAndDelete(
-		commentLikeToDelete._id
+	checkResource(review, LikeCountUpdateFailed);
+	const likeToDelete = await ReviewLike.findByIdAndDelete(
+		reviewLikeToDelete._id
 	);
 	if (!likeToDelete) {
 		throw new UnLikeFailed();
 	}
-	return commentLikeToDelete;
+	return reviewLikeToDelete;
 };

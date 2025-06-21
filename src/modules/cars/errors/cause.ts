@@ -35,6 +35,7 @@ class NoCarImageProvided extends Error {
 		this.name = 'NoCarImageProvided';
 	}
 }
+
 export {
 	CarNotFound,
 	CarCreationFailed,

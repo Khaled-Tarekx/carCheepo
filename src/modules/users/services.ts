@@ -1,5 +1,5 @@
 import UserModel from './models';
-import { Comment } from '../comments/models';
+import { Comment } from '../reviews/models';
 import {
 	findResourceById,
 	validateObjectIds,
@@ -7,7 +7,7 @@ import {
 } from '../../utills/helpers';
 
 import type { updateUserDTO } from './types';
-import { CommentNotFound } from '../comments/errors/cause';
+import { CommentNotFound } from '../reviews/errors/cause';
 import { UserDeletionFailed, UserUpdatingFailed } from './errors/cause';
 import { UserNotFound } from '../auth/errors/cause';
 

@@ -1,6 +1,6 @@
 import { mongooseId } from '../../utills/helpers';
 import z from 'zod';
 
-export const createReviewLikeSchema = z.object({
+export const createReviewViewSchema = z.object({
 	reviewId: mongooseId,
 });

@@ -8,7 +8,7 @@ import { UserSchema } from '../users/models';
 import { ReviewSchema } from '../reviews/models';
 
 @modelOptions({ schemaOptions: { timestamps: true } })
-class ReviewLikeSchema {
+class ReviewViewSchema {
 	@prop({ ref: () => 'ReviewSchema', required: true })
 	public review!: Ref<ReviewSchema>;
 
@@ -16,4 +16,4 @@ class ReviewLikeSchema {
 	public owner!: Ref<UserSchema>;
 }
 
-export const ReviewLike = getModelForClass(ReviewLikeSchema);
+export const ReviewView = getModelForClass(ReviewViewSchema);

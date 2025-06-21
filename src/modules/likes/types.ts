@@ -1,4 +1,4 @@
 import type { z } from 'zod';
-import type { createCommentLikeSchema } from './validation';
+import type { createReviewLikeSchema } from './validation';
 
-export type CommentLikeDTO = z.infer<typeof createCommentLikeSchema>;
+export type ReviewLikeDTO = z.infer<typeof createReviewLikeSchema>;

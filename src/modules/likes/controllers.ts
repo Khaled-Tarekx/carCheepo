@@ -1,9 +1,9 @@
 import type { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { createCommentLikeSchema } from './validation';
+import { createReviewLikeSchema } from './validation';
 
 import type { TypedRequestBody } from 'zod-express-middleware';
-import * as CommentLikeServices from './services';
+import * as ReviewLikeServices from './services';
 import { checkUser } from '../../utills/helpers';
 import {
 	LikeCountUpdateFailed,
@@ -23,15 +23,15 @@ import { NotResourceOwner, NotValidId } from '../../utills/errors/cause';
 import * as GlobalErrorMsg from '../../utills/errors/msg';
 import * as ErrorMsg from './errors/msg';
 
-export const getCommentLikes = async (req: Request, res: Response) => {
-	const { commentId } = req.params;
-	const commentLikes = await CommentLikeServices.getCommentLikes(commentId);
+export const getReviewLikes = async (req: Request, res: Response) => {
+	const { reviewId } = req.params;
+	const reviewLikes = await ReviewLikeServices.getReviewLikes(reviewId);
 	res
 		.status(StatusCodes.OK)
-		.json({ data: commentLikes, count: commentLikes.length });
+		.json({ data: reviewLikes, count: reviewLikes.length });
 };
 
-export const getUserCommentLike = async (
+export const getUserReviewLike = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
@@ -39,10 +39,8 @@ export const getUserCommentLike = async (
 	try {
 		const user = req.user;
 		checkUser(user);
-		const userCommentLike = await CommentLikeServices.getUserCommentLike(
-			user
-		);
-		res.status(StatusCodes.OK).json({ data: userCommentLike });
+		const userReviewLike = await ReviewLikeServices.getUserReviewLike(user);
+		res.status(StatusCodes.OK).json({ data: userReviewLike });
 	} catch (err: unknown) {
 		switch (true) {
 			case err instanceof UserNotFound:
@@ -55,8 +53,8 @@ export const getUserCommentLike = async (
 	}
 };
 
-export const createCommentLike = async (
-	req: TypedRequestBody<typeof createCommentLikeSchema>,
+export const createReviewLike = async (
+	req: TypedRequestBody<typeof createReviewLikeSchema>,
 	res: Response,
 	next: NextFunction
 ) => {
@@ -64,12 +62,12 @@ export const createCommentLike = async (
 		const user = req.user;
 		checkUser(user);
 
-		const { commentId } = req.body;
-		const commentLike = await CommentLikeServices.createCommentLike(
-			{ commentId },
+		const { reviewId } = req.body;
+		const reviewLike = await ReviewLikeServices.createReviewLike(
+			{ reviewId },
 			user
 		);
-		res.status(StatusCodes.CREATED).json({ data: commentLike });
+		res.status(StatusCodes.CREATED).json({ data: reviewLike });
 	} catch (err: unknown) {
 		switch (true) {
 			case err instanceof UserNotFound:
@@ -84,7 +82,7 @@ export const createCommentLike = async (
 	}
 };
 
-export const deleteCommentLike = async (
+export const deleteReviewLike = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
@@ -93,12 +91,12 @@ export const deleteCommentLike = async (
 		const user = req.user;
 		checkUser(user);
 		const { likeId } = req.params;
-		const deletedCommentLike = await CommentLikeServices.deleteCommentLike(
+		const deletedReviewLike = await ReviewLikeServices.deleteReviewLike(
 			likeId,
 			user
 		);
 
-		res.status(StatusCodes.OK).json({ data: deletedCommentLike });
+		res.status(StatusCodes.OK).json({ data: deletedReviewLike });
 	} catch (err: unknown) {
 		switch (true) {
 			case err instanceof UserNotFound:
