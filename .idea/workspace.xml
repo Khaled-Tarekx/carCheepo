@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ba425fa1-bad0-4f4d-8b6a-6e6f735bb44b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/database/connection.ts" beforeDir="false" afterPath="$PROJECT_DIR$/database/connection.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modules/auth/controllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/auth/controllers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modules/auth/utillities.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/auth/utillities.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modules/auth/validation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/auth/validation.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modules/users/models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/users/models.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="package.json" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2kIvLS5SJBLHybf4nosMZvwdogf" />
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "git-widget-placeholder": "main",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "ts.external.directory.path": "/Users/leondaz/PycharmProjects/biotics/TaskManager/node_modules/typescript/lib"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/types" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ba425fa1-bad0-4f4d-8b6a-6e6f735bb44b" name="Changes" comment="" />
+      <created>1722983849935</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1722983849935</updated>
+      <workItem from="1722983851042" duration="1946000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

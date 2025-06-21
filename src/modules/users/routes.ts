@@ -5,41 +5,29 @@ import {
 	getUser,
 	deleteUser,
 	updateUserInfo,
-	getUserReplies,
-	getUserReply,
-	getUserComment,
-	getUserComments,
-	getUserTasks,
-	getUserTask,
+	getUserReview,
+	getUserReviews,
 } from './controllers';
 import { updateUserSchema } from './validations';
 import { changePasswordSchema } from '../auth/validation';
 import { changePassword } from '../auth/controllers';
+import { authMiddleware } from '../auth/middleware';
 
 const router = express.Router();
 
 router.get('/', getUsers);
 
-router.get('/replies/me/:replyId', getUserReply);
-router.get('/replies/me', getUserReplies);
-router.get('/tasks/me', getUserTasks);
-router.get('/tasks/me/:id', getUserTask);
-router.route('/comments/me/:commentId').get(getUserComment);
-router.route('/comments/me').get(getUserComments);
+router.route('/comments/me/:commentId').get(authMiddleware, getUserReview);
+router.route('/comments/me').get(authMiddleware, getUserReviews);
 
-router.get('/:userId', getUser);
+router.get('/:userId', authMiddleware, getUser);
 
 router.put(
 	'/update-user',
+	authMiddleware,
 	validateResource({ bodySchema: updateUserSchema }),
 	updateUserInfo
 );
 
-router.patch(
-	'/change-password',
-	validateResource({ bodySchema: changePasswordSchema }),
-	changePassword
-);
-
-router.delete('/delete-user', deleteUser);
+router.delete('/delete-user', authMiddleware, deleteUser);
 export default router;

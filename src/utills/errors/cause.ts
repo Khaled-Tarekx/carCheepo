@@ -23,6 +23,13 @@ class LinkExpired extends Error {
 	}
 }
 
+class MailFailedToSend extends Error {
+	constructor() {
+		super('mail failed to send');
+		this.name = 'MailFailedToSend';
+	}
+}
+
 class ValidationError extends Error {}
 
 export {
@@ -31,4 +38,5 @@ export {
 	WorkspaceMismatch,
 	LinkExpired,
 	ValidationError,
+	MailFailedToSend,
 };

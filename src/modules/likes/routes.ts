@@ -1,24 +1,27 @@
 import { Router } from 'express';
 import {
-	getCommentLikes,
-	createCommentLike,
-	getUserCommentLike,
-	deleteCommentLike,
-} from './comment.controllers';
+	getReviewLikes,
+	createReviewLike,
+	getUserReviewLike,
+	deleteReviewLike,
+} from './controllers';
 
-import { createCommentLikeSchema } from './validation';
+import { createReviewLikeSchema } from './validation';
 import { validateResource } from '../../utills/middlewares';
+import { authMiddleware } from '../auth/middleware';
 
 const router = Router();
-router.get('/comments/:commentId', getCommentLikes);
+router.get('/reviews/:reviewId', authMiddleware, getReviewLikes);
 
-router.delete('/comments/:likeId', deleteCommentLike);
+router.delete('/reviews/:likeId', authMiddleware, deleteReviewLike);
 
 router.post(
-	'/comments',
-	validateResource({ bodySchema: createCommentLikeSchema }),
-	createCommentLike
+	'/reviews',
+	authMiddleware,
+
+	validateResource({ bodySchema: createReviewLikeSchema }),
+	createReviewLike
 );
-router.get('/comments/me/:commentId', getUserCommentLike);
+router.get('/reviews/me/:reviewId', authMiddleware, getUserReviewLike);
 
 export default router;

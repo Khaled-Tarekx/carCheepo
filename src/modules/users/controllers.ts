@@ -8,15 +8,13 @@ import { checkUser } from '../../utills/helpers';
 import { BadRequestError, NotFound } from '../../custom-errors/main';
 import { NotValidId } from '../../utills/errors/cause';
 import { UserNotFound } from '../auth/errors/cause';
+import { ReviewNotFound } from '../reviews/errors/cause';
+
 import { UserDeletionFailed, UserUpdatingFailed } from './errors/cause';
 import * as GlobalErrorMsg from '../../utills/errors/msg';
 import * as ErrorMsg from './errors/msg';
 import * as AuthErrorMsg from '../auth/errors/msg';
-
-import { CommentNotFound, ReplyNotFound } from '../comments/errors/cause';
-import * as CommentErrorMsg from '../comments/errors/msg';
-import * as TaskErrorMsg from '../tasks/errors/msg';
-import { TaskNotFound } from '../tasks/errors/cause';
+import * as ReviewErrorMsg from '../reviews/errors/msg';
 
 export const getUsers = async (req: Request, res: Response) => {
 	const user = req.user;
@@ -95,7 +93,7 @@ export const deleteUser = async (
 	}
 };
 
-export const getUserReplies = async (
+export const getUserReviews = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
@@ -103,11 +101,11 @@ export const getUserReplies = async (
 	const user = req.user;
 	try {
 		checkUser(user);
-		const userReplies = await UserServices.getUserReplies(user);
+		const userReviews = await UserServices.getUserReviews(user);
 
 		res
 			.status(StatusCodes.OK)
-			.json({ data: userReplies, count: userReplies.length });
+			.json({ data: userReviews, count: userReviews.length });
 	} catch (err: unknown) {
 		switch (true) {
 			case err instanceof UserNotFound:
@@ -118,120 +116,25 @@ export const getUserReplies = async (
 	}
 };
 
-export const getUserReply = async (
+export const getUserReview = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
-	const { replyId } = req.params;
+	const { reviewId } = req.params;
 	const user = req.user;
 	try {
 		checkUser(user);
-		const userReply = await UserServices.getUserReply(replyId, user);
-		res.status(StatusCodes.OK).json({ data: userReply });
+		const userReview = await UserServices.getUserReview(reviewId, user);
+		res.status(StatusCodes.OK).json({ data: userReview });
 	} catch (err: unknown) {
 		switch (true) {
 			case err instanceof UserNotFound:
 				return next(new NotFound(GlobalErrorMsg.LoginFirst));
 			case err instanceof NotValidId:
 				return next(new BadRequestError(GlobalErrorMsg.NotValidId));
-			case err instanceof ReplyNotFound:
-				return next(new NotFound(CommentErrorMsg.ReplyNotFound));
-			default:
-				return next(err);
-		}
-	}
-};
-
-export const getUserComments = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
-) => {
-	const user = req.user;
-	try {
-		checkUser(user);
-		const userComments = await UserServices.getUserComments(user);
-
-		res
-			.status(StatusCodes.OK)
-			.json({ data: userComments, count: userComments.length });
-	} catch (err: unknown) {
-		switch (true) {
-			case err instanceof UserNotFound:
-				return next(new NotFound(GlobalErrorMsg.LoginFirst));
-			default:
-				return next(err);
-		}
-	}
-};
-
-export const getUserComment = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
-) => {
-	const { commentId } = req.params;
-	const user = req.user;
-	try {
-		checkUser(user);
-		const userComment = await UserServices.getUserComment(commentId, user);
-		res.status(StatusCodes.OK).json({ data: userComment });
-	} catch (err: unknown) {
-		switch (true) {
-			case err instanceof UserNotFound:
-				return next(new NotFound(GlobalErrorMsg.LoginFirst));
-			case err instanceof NotValidId:
-				return next(new BadRequestError(GlobalErrorMsg.NotValidId));
-			case err instanceof CommentNotFound:
-				return next(new NotFound(CommentErrorMsg.CommentNotFound));
-			default:
-				return next(err);
-		}
-	}
-};
-
-export const getUserTasks = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
-) => {
-	const user = req.user;
-	try {
-		checkUser(user);
-		const tasks = await UserServices.getUserTasks(user);
-
-		res.status(StatusCodes.OK).json({ data: tasks, count: tasks.length });
-	} catch (err: unknown) {
-		switch (true) {
-			case err instanceof UserNotFound:
-				return next(new NotFound(GlobalErrorMsg.LoginFirst));
-			default:
-				return next(err);
-		}
-	}
-};
-
-export const getUserTask = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
-) => {
-	const user = req.user;
-	try {
-		checkUser(user);
-		const { taskId } = req.params;
-		const task = await UserServices.getUserTask(user, taskId);
-
-		res.status(StatusCodes.OK).json({ data: task });
-	} catch (err: unknown) {
-		switch (true) {
-			case err instanceof UserNotFound:
-				return next(new NotFound(GlobalErrorMsg.LoginFirst));
-			case err instanceof NotValidId:
-				return next(new BadRequestError(GlobalErrorMsg.NotValidId));
-			case err instanceof TaskNotFound:
-				return next(new NotFound(TaskErrorMsg.TaskNotFound));
+			case err instanceof ReviewNotFound:
+				return next(new NotFound(ReviewErrorMsg.ReviewNotFound));
 			default:
 				return next(err);
 		}

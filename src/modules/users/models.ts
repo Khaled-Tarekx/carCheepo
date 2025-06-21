@@ -14,7 +14,19 @@ export class UserSchema {
 
 	@prop({ type: () => String, required: true, unique: true, index: true })
 	public email!: string;
+	@prop({
+		type: () => String,
+		required: true,
+		unique: true,
+		maxlength: 13,
+		minlength: 9,
+	})
+	public phone!: string;
+	@prop({ type: () => String, required: true })
+	public city!: string;
 
+	@prop({ type: () => String, required: true })
+	public country!: string;
 	@prop({
 		type: () => String,
 		minlength: [6, 'Must be at least 6 characters'],

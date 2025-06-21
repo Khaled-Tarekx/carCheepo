@@ -1,12 +1,7 @@
-import { z } from 'zod';
-import { CarSchema } from './models';
-import { createCarSchema } from './validation';
+import type { z } from 'zod';
+import type { createCarSchema, updateCarSchema } from './validation';
 
-export type CreateCarInput = z.infer<typeof createCarSchema>;
-export type UpdateCarInput = Partial<CreateCarInput>;
+type createCarDTO = z.infer<typeof createCarSchema>;
+type updateCarDTO = z.infer<typeof updateCarSchema>;
 
-export interface CarDocument extends CarSchema {
-    _id: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
+export type { createCarDTO, updateCarDTO };

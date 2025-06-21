@@ -1,30 +1,40 @@
-import express from 'express';
+import { Router } from 'express';
+
 import { validateResource } from '../../utills/middlewares';
 import { createCarSchema, updateCarSchema } from './validation';
-import { createCar, deleteCar, getAllCars, getCarById, updateCar } from './controllers';
+
+const router = Router();
 import { authMiddleware } from '../auth/middleware';
 
-const router = express.Router();
+import {
+	getCar,
+	getUserCars,
+	createCar,
+	updateCar,
+	deleteCar,
+} from './controllers';
+import { uploadArray } from '../../setup/upload';
 
-// Public routes
-router.get('/', getAllCars);
-router.get('/:id', getCarById);
-
-// Protected routes
-router.use(authMiddleware); // Protect routes below this line
-
+router.get('/', authMiddleware, getUserCars);
+router
+	.route('/:carId')
+	.get(authMiddleware, getCar)
+	.patch(
+		authMiddleware,
+		uploadArray('images'),
+		validateResource({
+			bodySchema: updateCarSchema,
+		}),
+		updateCar
+	)
+	.delete(authMiddleware, deleteCar);
 router.post(
-    '/',
-    validateResource({ bodySchema: createCarSchema }),
-    createCar
-);
+	'/',
+	authMiddleware,
+	uploadArray('images'),
 
-router.patch(
-    '/:id',
-    validateResource({ bodySchema: updateCarSchema }),
-    updateCar
+	validateResource({ bodySchema: createCarSchema }),
+	createCar
 );
-
-router.delete('/:id', deleteCar);
 
 export default router;
