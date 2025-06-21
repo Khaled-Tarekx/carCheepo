@@ -259,10 +259,8 @@ export const createPost = async (
 		} = req.body;
 		const user = req.user;
 		checkUser(user);
-		const images = Array.isArray(req.files) ? req.files : [];
-		checkResource(images, NoCarImageProvided);
-		const imagePaths = images.map((image) => image.path);
-		const car = await PostServices.createPost(
+
+		const post = await PostServices.createPost(
 			{
 				title,
 				context,
@@ -283,12 +281,11 @@ export const createPost = async (
 					transmission,
 					type,
 					seller: user.id,
-					images: imagePaths,
 				},
 			},
 			user.id
 		);
-		res.status(StatusCodes.CREATED).json({ data: car });
+		res.status(StatusCodes.CREATED).json({ data: post });
 	} catch (err: unknown) {
 		switch (true) {
 			case err instanceof NotValidId:
@@ -301,6 +298,44 @@ export const createPost = async (
 				return next(new Conflict(NoCarImages));
 			case err instanceof PostCreationFailed:
 				return next(new Conflict(ErrorMsg.PostCreationFailed));
+			default:
+				return next(err);
+		}
+	}
+};
+
+export const uploadImagesToPost = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const user = req.user;
+		checkUser(user);
+		const { postId } = req.params;
+		const images = Array.isArray(req.files) ? req.files : [];
+		checkResource(images, NoCarImageProvided);
+		const imagePaths = images.map((image) => image.path);
+		const post = await PostServices.uploadImagesToPost(
+			{
+				car: {
+					images: imagePaths,
+				},
+				postId,
+			},
+			user.id
+		);
+		res.status(StatusCodes.CREATED).json({ data: post });
+	} catch (err: unknown) {
+		switch (true) {
+			case err instanceof NotValidId:
+				return next(new BadRequestError(GlobalErrorMsg.NotValidId));
+			case err instanceof LoginError:
+				return next(new AuthenticationError(GlobalErrorMsg.LoginFirst));
+			case err instanceof UserNotFound:
+				return next(new AuthenticationError(GlobalErrorMsg.LoginFirst));
+			case err instanceof NoCarImageProvided:
+				return next(new Conflict(NoCarImages));
 			default:
 				return next(err);
 		}
@@ -363,7 +398,6 @@ export const editPost = async (
 			description,
 			engine,
 			features,
-			images,
 			isFeatured,
 			manifacture,
 			mileage_km,
@@ -386,7 +420,6 @@ export const editPost = async (
 					description,
 					engine,
 					features,
-					images,
 					isFeatured,
 					manifacture,
 					mileage_km,

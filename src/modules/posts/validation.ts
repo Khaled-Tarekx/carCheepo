@@ -1,5 +1,6 @@
 import z from 'zod';
 import { updateCarSchema, createCarSchema } from '../cars/validation';
+import { mongooseId } from '../../utills/helpers';
 
 const editPostSchema = z.object({
 	title: z.string().min(1).optional(),
@@ -13,4 +14,11 @@ const createPostSchema = z.object({
 	car: createCarSchema,
 });
 
-export { editPostSchema, createPostSchema };
+const uploadImagesToPostSchema = z.object({
+	postId: mongooseId,
+	car: z.object({
+		images: z.array(z.string().url()).min(1),
+	}),
+});
+
+export { editPostSchema, createPostSchema, uploadImagesToPostSchema };

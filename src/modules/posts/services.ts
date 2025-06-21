@@ -6,7 +6,11 @@ import {
 	isResourceOwner,
 } from '../../utills/helpers';
 
-import type { createPublishedPostDTO, editPostDTO } from './types';
+import type {
+	createPublishedPostDTO,
+	editPostDTO,
+	uploadImagesToPostDTO,
+} from './types';
 import {
 	PostCreationFailed,
 	PostDeletionFailed,
@@ -44,6 +48,25 @@ export const createPost = async (
 	return post;
 };
 
+export const uploadImagesToPost = async (
+	postData: uploadImagesToPostDTO,
+	userId: string
+) => {
+	validateObjectIds([userId]);
+	const post = await Post.findByIdAndUpdate(
+		{ _id: postData.postId, publisher: userId },
+		{
+			car: {
+				images: postData.car.images,
+			},
+		},
+		{ new: true }
+	);
+
+	checkResource(post, PostCreationFailed);
+
+	return post;
+};
 export const editCar = async (
 	postData: editPostDTO,
 	postId: string,
