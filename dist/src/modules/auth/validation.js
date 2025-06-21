@@ -6,6 +6,25 @@ export const createUserSchema = z.object({
         required_error: 'Username is required',
         invalid_type_error: 'Username must be a string',
     }),
+    phone: z
+        .string({
+        required_error: 'phone is required',
+        invalid_type_error: 'phone must be a string',
+    })
+        .min(9, {
+        message: 'phone must be at least 9 characters long',
+    })
+        .max(13, {
+        message: 'phone must be at most 13 characters long',
+    }),
+    country: z.string({
+        required_error: 'country is required',
+        invalid_type_error: 'country must be a string',
+    }),
+    city: z.string({
+        required_error: 'city is required',
+        invalid_type_error: 'city must be a string',
+    }),
     email: z
         .string({
         required_error: 'Email is required',
@@ -74,14 +93,18 @@ export const resetPasswordSchema = z.object({
         required_error: 'token is required',
         invalid_type_error: 'token must be a string',
     }),
-    password: z.string({
+    password: z
+        .string({
         required_error: 'password is required',
         invalid_type_error: 'password must be a string',
-    }).min(6, 'password cant be less than 6 characters'),
-    confirmPassword: z.string({
+    })
+        .min(6, 'password cant be less than 6 characters'),
+    confirmPassword: z
+        .string({
         required_error: 'confirm password is required',
         invalid_type_error: 'confirm password must be a string',
-    }).min(6, 'confirm password cant be less than 6 characters'),
+    })
+        .min(6, 'password cant be less than 6 characters'),
 });
 export const verfifyResetPasswordSchema = z.object({
     resetCode: z.string({

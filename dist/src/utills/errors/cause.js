@@ -22,6 +22,12 @@ class LinkExpired extends Error {
         this.name = 'LinkExpired';
     }
 }
+class MailFailedToSend extends Error {
+    constructor() {
+        super('mail failed to send');
+        this.name = 'MailFailedToSend';
+    }
+}
 class ValidationError extends Error {
 }
-export { NotResourceOwner, NotValidId, WorkspaceMismatch, LinkExpired, ValidationError, };
+export { NotResourceOwner, NotValidId, WorkspaceMismatch, LinkExpired, ValidationError, MailFailedToSend, };

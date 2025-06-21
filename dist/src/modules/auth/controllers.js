@@ -5,7 +5,7 @@ import { AuthenticationError, Conflict, NotFound, } from '../../custom-errors/ma
 import * as ErrorMsg from './errors/msg.js';
 import * as UserErrorMsg from '../users/errors/msg.js';
 import { UserUpdatingFailed } from '../users/errors/cause.js';
-import { MailFailedToSend } from '../tasks/errors/cause.js';
+import { MailFailedToSend } from '../../utills/errors/cause.js';
 import { checkResource } from '../../utills/helpers.js';
 /**
  * @swagger
@@ -24,8 +24,17 @@ import { checkResource } from '../../utills/helpers.js';
  *               - username
  *               - email
  *               - password
+ *               - phone
+ *               - country
+ *               - city
  *             properties:
  *               username:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               country:
+ *                 type: string
+ *               city:
  *                 type: string
  *               email:
  *                 type: string
@@ -42,12 +51,15 @@ import { checkResource } from '../../utills/helpers.js';
  *         description: Server error
  */
 export const registerUser = async (req, res, next) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, country, city, phone } = req.body;
     try {
         const user = await AuthServices.registerUser({
             username,
             email,
             password,
+            country,
+            city,
+            phone,
         });
         res.status(StatusCodes.CREATED).json({ data: user });
     }

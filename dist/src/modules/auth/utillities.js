@@ -2,9 +2,9 @@ import User from '../users/models.js';
 import jwt from 'jsonwebtoken';
 import { compare, hash } from 'bcrypt';
 import { PasswordComparisionError, PasswordHashingError, TokenVerificationFailed, UserNotFound, } from './errors/cause.js';
-import emailQueue from '../tasks/queue.js';
+import emailQueue from '../../setup/queue.js';
 import moment from 'moment';
-import { MailFailedToSend } from '../tasks/errors/cause.js';
+import { MailFailedToSend } from '../../utills/errors/cause.js';
 import { findResourceById } from '../../utills/helpers.js';
 export const createTokenFromUser = async (user, secret, expires) => {
     if (!user) {

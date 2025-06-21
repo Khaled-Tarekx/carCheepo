@@ -14,6 +14,9 @@ let UserSchema = class UserSchema {
     isLoggedIn;
     roles;
     email;
+    phone;
+    city;
+    country;
     password;
     resetPasswordCode;
     resetPasswordExpire;
@@ -34,6 +37,24 @@ __decorate([
     prop({ type: () => String, required: true, unique: true, index: true }),
     __metadata("design:type", String)
 ], UserSchema.prototype, "email", void 0);
+__decorate([
+    prop({
+        type: () => String,
+        required: true,
+        unique: true,
+        maxlength: 13,
+        minlength: 9,
+    }),
+    __metadata("design:type", String)
+], UserSchema.prototype, "phone", void 0);
+__decorate([
+    prop({ type: () => String, required: true }),
+    __metadata("design:type", String)
+], UserSchema.prototype, "city", void 0);
+__decorate([
+    prop({ type: () => String, required: true }),
+    __metadata("design:type", String)
+], UserSchema.prototype, "country", void 0);
 __decorate([
     prop({
         type: () => String,

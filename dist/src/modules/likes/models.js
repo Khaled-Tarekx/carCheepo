@@ -8,19 +8,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { getModelForClass, modelOptions, prop, } from '@typegoose/typegoose';
-let CommentLikeSchema = class CommentLikeSchema {
-    comment;
+let ReviewLikeSchema = class ReviewLikeSchema {
+    review;
     owner;
 };
 __decorate([
-    prop({ ref: () => 'CommentSchema', required: true }),
+    prop({ ref: () => 'ReviewSchema', required: true }),
     __metadata("design:type", Object)
-], CommentLikeSchema.prototype, "comment", void 0);
+], ReviewLikeSchema.prototype, "review", void 0);
 __decorate([
     prop({ ref: () => 'UserSchema', required: true }),
     __metadata("design:type", Object)
-], CommentLikeSchema.prototype, "owner", void 0);
-CommentLikeSchema = __decorate([
+], ReviewLikeSchema.prototype, "owner", void 0);
+ReviewLikeSchema = __decorate([
     modelOptions({ schemaOptions: { timestamps: true } })
-], CommentLikeSchema);
-export const CommentLike = getModelForClass(CommentLikeSchema);
+], ReviewLikeSchema);
+export const ReviewLike = getModelForClass(ReviewLikeSchema);

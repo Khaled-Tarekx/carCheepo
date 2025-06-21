@@ -8,12 +8,10 @@ const accessSecretKey = process.env.ACCESS_SECRET_KEY;
 const refreshSecretKey = process.env.REFRESH_SECRET_KEY;
 console.log('Access Secret Key:', accessSecretKey); // Debug log
 export const registerUser = async (userInput) => {
-    const { username, email, password } = userInput;
-    const hashedPassword = await argon2.hash(password);
+    const hashedPassword = await argon2.hash(userInput.password);
     checkResource(hashedPassword, PasswordHashingError);
     const user = await User.create({
-        username,
-        email,
+        ...userInput,
         password: hashedPassword,
     });
     const userWithoutPassword = user.toObject();
@@ -33,25 +31,25 @@ export const loginUser = async (logininput, res) => {
     }
     const updatedUser = await User.findOneAndUpdate({ email: emailExists.email }, { isLoggedIn: true }, { new: true });
     checkResource(updatedUser, UserUpdatingFailed);
-    const jwtToken = await createTokenFromUser(updatedUser, accessSecretKey, '1h');
+    const jwtToken = await createTokenFromUser(updatedUser, accessSecretKey, '15m');
     const refreshToken = await createTokenFromUser(updatedUser, refreshSecretKey, '90d');
-    res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    // res.cookie('refreshToken', refreshToken, {
+    // 	httpOnly: true,
+    // 	secure: process.env.NODE_ENV === 'production',
+    // 	sameSite: 'strict',
+    // 	maxAge: 7 * 24 * 60 * 60 * 1000,
+    // });
     const userData = {
         email: updatedUser.email,
         id: updatedUser._id,
         roles: updatedUser.roles,
     };
-    return { jwtToken, userData };
+    return { jwtToken, refreshToken, userData };
 };
 export const refreshSession = async (tokenInput) => {
     const { refresh_token } = tokenInput;
     const user = await getUserFromToken(refresh_token, refreshSecretKey);
-    const newAccessToken = await createTokenFromUser(user, accessSecretKey, '1h');
+    const newAccessToken = await createTokenFromUser(user, accessSecretKey, '15m');
     return {
         jwtToken: newAccessToken,
         userData: {
