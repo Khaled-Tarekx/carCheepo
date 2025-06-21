@@ -8,10 +8,13 @@ import { checkUser } from '../../utills/helpers';
 import { BadRequestError, NotFound } from '../../custom-errors/main';
 import { NotValidId } from '../../utills/errors/cause';
 import { UserNotFound } from '../auth/errors/cause';
+import { ReviewNotFound } from '../reviews/errors/cause';
+
 import { UserDeletionFailed, UserUpdatingFailed } from './errors/cause';
 import * as GlobalErrorMsg from '../../utills/errors/msg';
 import * as ErrorMsg from './errors/msg';
 import * as AuthErrorMsg from '../auth/errors/msg';
+import * as ReviewErrorMsg from '../reviews/errors/msg';
 
 export const getUsers = async (req: Request, res: Response) => {
 	const user = req.user;
@@ -90,7 +93,7 @@ export const deleteUser = async (
 	}
 };
 
-export const getUserComments = async (
+export const getUserReviews = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
@@ -98,11 +101,11 @@ export const getUserComments = async (
 	const user = req.user;
 	try {
 		checkUser(user);
-		const userComments = await UserServices.getUserComments(user);
+		const userReviews = await UserServices.getUserReviews(user);
 
 		res
 			.status(StatusCodes.OK)
-			.json({ data: userComments, count: userComments.length });
+			.json({ data: userReviews, count: userReviews.length });
 	} catch (err: unknown) {
 		switch (true) {
 			case err instanceof UserNotFound:
@@ -113,25 +116,25 @@ export const getUserComments = async (
 	}
 };
 
-export const getUserComment = async (
+export const getUserReview = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
-	const { commentId } = req.params;
+	const { reviewId } = req.params;
 	const user = req.user;
 	try {
 		checkUser(user);
-		const userComment = await UserServices.getUserComment(commentId, user);
-		res.status(StatusCodes.OK).json({ data: userComment });
+		const userReview = await UserServices.getUserReview(reviewId, user);
+		res.status(StatusCodes.OK).json({ data: userReview });
 	} catch (err: unknown) {
 		switch (true) {
 			case err instanceof UserNotFound:
 				return next(new NotFound(GlobalErrorMsg.LoginFirst));
 			case err instanceof NotValidId:
 				return next(new BadRequestError(GlobalErrorMsg.NotValidId));
-			// case err instanceof CommentNotFound:
-			// 	return next(new NotFound(CommentErrorMsg.CommentNotFound));
+			case err instanceof ReviewNotFound:
+				return next(new NotFound(ReviewErrorMsg.ReviewNotFound));
 			default:
 				return next(err);
 		}

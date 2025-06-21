@@ -1,5 +1,5 @@
 import UserModel from './models';
-import { Comment } from '../reviews/models';
+import { Review } from '../reviews/models';
 import {
 	findResourceById,
 	validateObjectIds,
@@ -7,7 +7,7 @@ import {
 } from '../../utills/helpers';
 
 import type { updateUserDTO } from './types';
-import { CommentNotFound } from '../reviews/errors/cause';
+import { ReviewNotFound } from '../reviews/errors/cause';
 import { UserDeletionFailed, UserUpdatingFailed } from './errors/cause';
 import { UserNotFound } from '../auth/errors/cause';
 
@@ -48,21 +48,18 @@ export const deleteUser = async (user: Express.User) => {
 	return userToDelete;
 };
 
-export const getUserComments = async (user: Express.User) => {
-	return Comment.find({
+export const getUserReviews = async (user: Express.User) => {
+	return Review.find({
 		owner: user.id,
 	});
 };
 
-export const getUserComment = async (
-	commentId: string,
-	user: Express.User
-) => {
-	validateObjectIds([commentId]);
-	const comment = await Comment.findOne({
-		_id: commentId,
+export const getUserReview = async (reviewId: string, user: Express.User) => {
+	validateObjectIds([reviewId]);
+	const review = await Review.findOne({
+		_id: reviewId,
 		owner: user.id,
 	});
-	checkResource(comment, CommentNotFound);
-	return comment;
+	checkResource(review, ReviewNotFound);
+	return review;
 };

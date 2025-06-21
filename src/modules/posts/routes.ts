@@ -21,7 +21,7 @@ router
 	.get(authMiddleware, getPost)
 	.patch(
 		authMiddleware,
-		uploadArray('images'),
+		uploadArray('car.images'),
 		validateResource({
 			bodySchema: editPostSchema,
 		}),
@@ -31,7 +31,7 @@ router
 router.post(
 	'/',
 	authMiddleware,
-	uploadArray('images'),
+	uploadArray('car.images'),
 
 	validateResource({ bodySchema: createPostSchema }),
 	createPost
