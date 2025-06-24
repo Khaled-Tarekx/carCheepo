@@ -1,0 +1,13 @@
+import express from 'express';
+import { validateResource } from '../../utills/middlewares.js';
+import { getUsers, getUser, deleteUser, updateUserInfo, getUserReview, getUserReviews, } from './controllers.js';
+import { updateUserSchema } from './validations.js';
+import { authMiddleware } from '../auth/middleware.js';
+const router = express.Router();
+router.get('/', getUsers);
+router.route('/comments/me/:commentId').get(authMiddleware, getUserReview);
+router.route('/comments/me').get(authMiddleware, getUserReviews);
+router.get('/:userId', authMiddleware, getUser);
+router.put('/update-user', authMiddleware, validateResource({ bodySchema: updateUserSchema }), updateUserInfo);
+router.delete('/delete-user', authMiddleware, deleteUser);
+export default router;

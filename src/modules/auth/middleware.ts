@@ -7,9 +7,9 @@ import { getUserFromToken } from './utillities';
 const access_secret = process.env.ACCESS_SECRET_KEY;
 
 export const authMiddleware = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
+  req: Request,
+  res: Response,
+  next: NextFunction
 ) => {
 	try {
 		const authHeader = req.headers.authorization;

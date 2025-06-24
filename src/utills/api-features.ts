@@ -74,6 +74,7 @@ class ApiFeatures<T> {
 
 		return this;
 	}
+	
 }
 
 export default ApiFeatures;
