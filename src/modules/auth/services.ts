@@ -86,6 +86,9 @@ export const loginUser = async (logininput: loginDTO, res: Response) => {
 		email: updatedUser.email,
 		id: updatedUser._id,
 		roles: updatedUser.roles,
+		country: updatedUser.country,
+		city: updatedUser.city,
+		phone: updatedUser.phone,
 	};
 
 	return { jwtToken, refreshToken, userData };
