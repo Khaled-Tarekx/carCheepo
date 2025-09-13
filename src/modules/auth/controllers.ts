@@ -163,6 +163,7 @@ export const signInUser = async (
 ) => {
 	const { email, password } = req.body;
 	try {
+		// Validate email and password
 		const data = await AuthServices.loginUser({ email, password }, res);
 
 		res.status(StatusCodes.OK).json(data);

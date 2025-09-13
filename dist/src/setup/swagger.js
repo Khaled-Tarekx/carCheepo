@@ -7,9 +7,9 @@ const swaggerOptions = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Task Management API',
+            title: 'Car Resale API',
             version: '1.0.0',
-            description: 'API documentation for Task Management System',
+            description: 'API documentation for Car Resale Application',
         },
         servers: [
             {
@@ -25,6 +25,68 @@ const swaggerOptions = {
                     bearerFormat: 'JWT',
                 },
             },
+            schemas: {
+                Notification: {
+                    type: 'object',
+                    properties: {
+                        id: {
+                            type: 'string',
+                            example: '1234567890'
+                        },
+                        type: {
+                            type: 'string',
+                            example: 'NEW_LIKE'
+                        },
+                        message: {
+                            type: 'string',
+                            example: 'Someone liked your car!'
+                        },
+                        data: {
+                            type: 'object',
+                            example: {
+                                carId: 'car123',
+                                likerId: 'user456'
+                            }
+                        },
+                        timestamp: {
+                            type: 'string',
+                            format: 'date-time',
+                            example: '2023-01-01T00:00:00.000Z'
+                        },
+                        read: {
+                            type: 'boolean',
+                            example: false
+                        }
+                    }
+                },
+                CarLike: {
+                    type: 'object',
+                    properties: {
+                        id: {
+                            type: 'string',
+                            example: 'like123'
+                        },
+                        owner: {
+                            type: 'string',
+                            example: 'user456'
+                        },
+                        car: {
+                            type: 'string',
+                            example: 'car789'
+                        },
+                        createdAt: {
+                            type: 'string',
+                            format: 'date-time',
+                            example: '2023-01-01T00:00:00.000Z'
+                        },
+                        updatedAt: {
+                            type: 'string',
+                            format: 'date-time',
+                            example: '2023-01-01T00:00:00.000Z'
+                        }
+                    }
+                }
+            }
         },
         security: [
             {

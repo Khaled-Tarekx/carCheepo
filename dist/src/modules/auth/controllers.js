@@ -131,6 +131,7 @@ export const registerUser = async (req, res, next) => {
 export const signInUser = async (req, res, next) => {
     const { email, password } = req.body;
     try {
+        // Validate email and password
         const data = await AuthServices.loginUser({ email, password }, res);
         res.status(StatusCodes.OK).json(data);
     }

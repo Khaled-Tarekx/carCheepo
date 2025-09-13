@@ -27,16 +27,16 @@ import { NoCarImageProvided } from '../cars/errors/cause';
 
 /**
  * @swagger
- * /cars:
+ * /posts/user:
  *   get:
  *     tags:
- *       - Cars
- *     summary: Get all cars created by the authenticated user
+ *       - Posts
+ *     summary: Get all posts created by the authenticated user
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: A list of the user's cars
+ *         description: A list of the user's posts
  *         content:
  *           application/json:
  *             schema:
@@ -48,7 +48,7 @@ import { NoCarImageProvided } from '../cars/errors/cause';
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Car'
+ *                     $ref: '#/components/schemas/Post'
  *       401:
  *         description: Unauthorized
  */
